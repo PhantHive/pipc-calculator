@@ -1,0 +1,68 @@
+
+
+QMainWindow {
+    border-image: url("src/image/bg.jpg") 0 0 0 0 stretch stretch;
+}
+
+QLabel {
+    color: black;
+    font-family: simplicity, serif;
+    font-size: 55px;
+
+}
+
+QLabel[type="1"]{
+
+    font-size: 25px;
+}
+
+QLineEdit {
+    background-color: black;
+    color: white;
+    border: 1px solid;
+    border-color: aqua;
+}
+
+
+
+QPushButton {
+
+    padding: 1.4rem 5.2rem;
+    font-size: 5rem;
+    text-transform: uppercase;
+
+}
+
+QPushButton[type="1"] {
+    background-color: black;
+    color: white;
+    border: 1.5px solid;
+    border-color: aqua;
+}
+QPushButton[type="1"]:hover {
+    border-color: white;
+    color: white;
+}
+
+
+
+/*
+QLabel#planeLabel {
+    border-image: url("assets/image/fuel_calculator/private.jpg") 0 0 0 0 stretch stretch;
+    border: 1px solid black;
+    border-radius: 20px 20px;
+
+}
+
+QLabel#planeSel {
+    color: black;
+    font-size: 25px;
+
+}
+
+QLabel#dimlabel {
+    color: #1c24c1;
+    font-size: 50px;
+    border-radius: 30px 30px;
+}
+

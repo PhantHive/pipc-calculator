@@ -20,7 +20,7 @@ class Main(object):
 
         # Button Iter Power Page
         self.ipBt = QPushButton(self.mainWidget)
-        self.ipBt.setText(" ♦   Iterative Power")
+        self.ipBt.setText(" ♦   Puissance Itérée")
         self.ipBt.move(320, 150)
         self.ipBt.resize(120, 55)
 

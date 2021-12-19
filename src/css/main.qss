@@ -5,7 +5,7 @@ QMainWindow {
 }
 
 QLabel {
-    color: black;
+    color: #ffffff;
     font-family: simplicity, serif;
     font-size: 55px;
 
@@ -16,6 +16,13 @@ QLabel[type="1"]{
     font-size: 25px;
 }
 
+QLabel[type="2"]{
+
+    font-size: 25px;
+    border-top: 1px solid;
+    border-color: aqua;
+}
+
 QLineEdit {
     background-color: black;
     color: white;
@@ -23,7 +30,12 @@ QLineEdit {
     border-color: aqua;
 }
 
-
+QComboBox {
+    background-color: black;
+    color: white;
+    border: 1px solid;
+    border-color: aqua;
+}
 
 QPushButton {
 
@@ -43,6 +55,8 @@ QPushButton[type="1"]:hover {
     border-color: white;
     color: white;
 }
+
+
 
 
 

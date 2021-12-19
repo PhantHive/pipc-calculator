@@ -50,6 +50,9 @@ class IterPower:
         self.verif = False
         return self.diff, self.nmax
 
+    def eigvals(self):
+        vals, vec = np.linalg.eig(self.A)
+        return vals, vec
 
 '''if __name__ == '__main__':
     n = 3

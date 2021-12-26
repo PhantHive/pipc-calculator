@@ -4,6 +4,7 @@ QMainWindow {
     border-image: url("src/image/bg.jpg") 0 0 0 0 stretch stretch;
 }
 
+
 QLabel {
     color: #ffffff;
     font-family: simplicity, serif;
@@ -23,6 +24,7 @@ QLabel[type="2"]{
     border-color: aqua;
     text-align: center;
 }
+
 
 QLineEdit {
     background-color: black;
@@ -51,6 +53,7 @@ QPushButton[type="1"] {
     color: white;
     border: 1.5px solid;
     border-color: aqua;
+    border-radius: 10%;
 }
 QPushButton[type="1"]:hover {
     border-color: white;

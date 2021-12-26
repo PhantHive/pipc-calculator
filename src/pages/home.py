@@ -31,4 +31,7 @@ class Main(object):
         self.ivBt.move(320, 250)
         self.ivBt.resize(125, 55)
 
+        self.ipBt.setProperty("type", 1)
+        self.ivBt.setProperty("type", 1)
+
         Main.setCentralWidget(self.mainWidget)

@@ -1,15 +1,22 @@
 from decimal import Decimal
 
+import matplotlib.style
 import numpy as np
 from PyQt5 import QtGui, QtWidgets, QtCore, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIntValidator
 from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QStackedWidget, QHBoxLayout, QVBoxLayout, \
     QWidget, QListWidget, QStackedLayout, QLineEdit, QFormLayout, QComboBox
+from matplotlib import pyplot as plt
+
+
+from src.canvas.Canvas import Canvas
 from src.maths.iterPower import IterPower
 from src.maths.createMatrix import Matrix
 import sys
-
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from src.maths.norm import Norm
+
+
 
 
 class IPWindow(object):
@@ -20,30 +27,42 @@ class IPWindow(object):
         self.inputs = []
         self.choice = "Random"
 
-
     def setupUI(self, IPWindow):
-        IPWindow.setGeometry(500, 100, 1200, 750)
-        IPWindow.setFixedSize(1200, 750)
+        IPWindow.setGeometry(500, 100, 1200, 780)
+        IPWindow.setFixedSize(1200, 780)
         IPWindow.setWindowTitle("MATH PROJECT - IPSA 2021 \ Puissance Itérée")
 
-        self.IVWidgets = QWidget(IPWindow)
+        self.IPWidgets = QWidget(IPWindow)
+        self.canvas = Canvas(self.IPWidgets)
+        self.canvas.resize(475, 275)
+        self.canvas.move(370, 500)
 
-        self.labelIV = QLabel(self.IVWidgets)
+
+        '''layout = QtWidgets.QVBoxLayout(self.IPWidgets)
+        layout.addWidget(self.canvas)
+        self.IPWidgets.setLayout(layout)'''
+
+        # self.toolbar = NavigationToolbar(self.canvas, IPWindow)
+
+        # test
+
+        self.labelIV = QLabel(self.IPWidgets)
         self.labelIV.setText("Puissance Itérée")
         self.labelIV.move(50, 50)
         self.labelIV.resize(700, 70)
 
         # Button Home page
-        self.homeBt = QPushButton(self.IVWidgets)
+        self.homeBt = QPushButton(self.IPWidgets)
         self.homeBt.setText("MENU")
-        self.homeBt.move(1060, 690)
+        self.homeBt.move(1060, 720)
         self.homeBt.resize(130, 55)
+        self.homeBt.setProperty("type", 1)
 
         self.entry_widgets()
         self.result_widgets()
         self.move_widgets()
 
-        IPWindow.setCentralWidget(self.IVWidgets)
+        IPWindow.setCentralWidget(self.IPWidgets)
 
     def hide_mat(self, n):
 
@@ -70,19 +89,19 @@ class IPWindow(object):
 
     def entry_widgets(self):
 
-        self.matChoice = QComboBox(self.IVWidgets)
+        self.matChoice = QComboBox(self.IPWidgets)
         self.matChoice.addItem("Random")
         self.matChoice.addItem("Custom")
         self.matChoice.activated[str].connect(self.new_ui)
 
         # Nitermax
-        self.niterMax = QLabel(self.IVWidgets)
+        self.niterMax = QLabel(self.IPWidgets)
         self.niterMax.setText('Nitermax>')
-        self.nmaxInput = QLineEdit(self.IVWidgets)
+        self.nmaxInput = QLineEdit(self.IPWidgets)
 
         # Tolerance value
-        self.epsInput = QLineEdit(self.IVWidgets)
-        self.epsilon = QLabel(self.IVWidgets)
+        self.epsInput = QLineEdit(self.IPWidgets)
+        self.epsilon = QLabel(self.IPWidgets)
         self.epsilon.setText("Tolerance>")
 
         self.nmaxInput.setValidator(self.onlyInt)
@@ -94,26 +113,26 @@ class IPWindow(object):
         self.inputs.append(self.epsInput)
 
         # custom matrix
-        self.custMatrix = QLabel(self.IVWidgets)
+        self.custMatrix = QLabel(self.IPWidgets)
         self.custMatrix.setText("Matrice> ")
         self.custMatrix.setProperty("type", 1)
 
         # Matrix size
-        self.msizeInput = QLineEdit(self.IVWidgets)
-        self.matrixSize = QLabel(self.IVWidgets)
+        self.msizeInput = QLineEdit(self.IPWidgets)
+        self.matrixSize = QLabel(self.IPWidgets)
         self.matrixSize.setText("Taille (n, n)>")
         self.msizeInput.setValidator(self.onlyInt)
         self.matrixSize.setProperty("type", 1)
 
-        self.matA = QLineEdit(self.IVWidgets)
-        self.matB = QLineEdit(self.IVWidgets)
-        self.matC = QLineEdit(self.IVWidgets)
-        self.matD = QLineEdit(self.IVWidgets)
-        self.matE = QLineEdit(self.IVWidgets)
-        self.matF = QLineEdit(self.IVWidgets)
-        self.matG = QLineEdit(self.IVWidgets)
-        self.matH = QLineEdit(self.IVWidgets)
-        self.matI = QLineEdit(self.IVWidgets)
+        self.matA = QLineEdit(self.IPWidgets)
+        self.matB = QLineEdit(self.IPWidgets)
+        self.matC = QLineEdit(self.IPWidgets)
+        self.matD = QLineEdit(self.IPWidgets)
+        self.matE = QLineEdit(self.IPWidgets)
+        self.matF = QLineEdit(self.IPWidgets)
+        self.matG = QLineEdit(self.IPWidgets)
+        self.matH = QLineEdit(self.IPWidgets)
+        self.matI = QLineEdit(self.IPWidgets)
 
         self.matrix = [self.matA, self.matB, self.matC, self.matD, self.matE,
                        self.matF, self.matG, self.matH, self.matI]
@@ -122,32 +141,31 @@ class IPWindow(object):
             mat.setValidator(self.onlyInt)
 
         # calculate button
-        self.calcul = QPushButton(self.IVWidgets)
+        self.calcul = QPushButton(self.IPWidgets)
         self.calcul.setText("Calculer =>")
         self.calcul.setProperty("type", 1)
-
 
         self.calcul.clicked.connect(self.calculate)
 
     def result_widgets(self):
         # Result
-        self.nbiter = QLabel(self.IVWidgets)
+        self.nbiter = QLabel(self.IPWidgets)
         self.nbiter.setText('*Nombre d\'itération*')
         self.nbiter.setProperty("type", 2)
 
-        self.lastdiff = QLabel(self.IVWidgets)
+        self.lastdiff = QLabel(self.IPWidgets)
         self.lastdiff.setText('*Dernier écart*')
         self.lastdiff.setProperty("type", 2)
 
-        self.eigvals = QLabel(self.IVWidgets)
+        self.eigvals = QLabel(self.IPWidgets)
         self.eigvals.setText('*Valeur Propre Max*')
         self.eigvals.setProperty("type", 2)
 
-        self.valnorm = QLabel(self.IVWidgets)
+        self.valnorm = QLabel(self.IPWidgets)
         self.valnorm.setText('*Norme*')
         self.valnorm.setProperty("type", 2)
 
-        self.eigvec = QLabel(self.IVWidgets)
+        self.eigvec = QLabel(self.IPWidgets)
         self.eigvec.setText('*Approximation de Vecteur Propre*')
         self.eigvec.setProperty("type", 2)
 
@@ -223,12 +241,15 @@ class IPWindow(object):
             if self.msizeInput.text() == "":
                 self.msizeInput.setPlaceholderText("Insert an integer")
                 self.startCalc.append(False)
+            elif int(self.msizeInput.text()) > 1000:
+                self.msizeInput.clear()
+                self.msizeInput.setPlaceholderText("< 1001")
+                self.startCalc.append(False)
         else:
             for mat in self.matrix:
                 if mat.text() == "":
                     mat.setPlaceholderText("X")
                     self.startCalc.append(False)
-
 
         if False in self.startCalc:
             self.startCalc.clear()
@@ -249,13 +270,13 @@ class IPWindow(object):
                 matA = np.array(self.mat_inputs)
 
             print(matA)
-            IV = IterPower(matA, eps, nmax)
-            last_diff, nbIter = IV.iter()
+            IP = IterPower(matA, eps, nmax)
+            last_diff, nbIter = IP.iter()
             last_diff = "{:.5e}".format(Decimal(last_diff)).replace(".", ",")
 
             self.eigvals.resize(250, 100)
             self.eigvec.resize(450, 300)
-            vals, vecs = IV.eigvals()
+            vals, vecs = IP.eigvals()
             val = "{:.2f}".format(Decimal(vals)).replace(".", ",")
             eigvals_txt = f"Valeur Propre Max: \n {val} \n"
 
@@ -279,3 +300,7 @@ class IPWindow(object):
             self.nbiter.setText(f"Nb iter = {nbIter}")
             self.lastdiff.setText(f"Ecart = {last_diff}")
             self.eigvals.setText(eigvals_txt)
+            iter_list, proc_list = IP.get_datas()
+
+            self.canvas.plot(iter_list, proc_list)
+            self.canvas.draw()

@@ -1,3 +1,4 @@
+import time
 import numpy as np
 
 
@@ -15,6 +16,8 @@ class IterPower:
         self.diff = None
         self.verif = False
         self.vp = None
+        self.proc_time = []
+        self.iter_list = []
 
     def w_sequence(self, k):
         w = (np.linalg.matrix_power(self.A, k) @ self.x) / (np.linalg.norm((np.linalg.matrix_power(self.A, k)) @ self.x))
@@ -26,8 +29,10 @@ class IterPower:
 
     def iter(self):
 
+        start = time.time()
         for k in range(1, self.nmax):
             print("k=", k)
+            self.iter_list.append(k)
             self.w = self.w_sequence(k)
             print(self.w, self.old_w)
             if self.old_w is not None:
@@ -42,13 +47,16 @@ class IterPower:
                 self.verif = False
 
             if self.verif:
-
+                stop = time.time()
+                self.proc_time.append(stop - start)
                 return self.diff, k
 
             else:
                 self.old_w = self.w
                 self.c = self.c_sequence(self.w)
                 self.vp = np.linalg.norm(self.c)
+                stop = time.time()
+                self.proc_time.append(stop - start)
 
         self.verif = False
         return self.diff, (self.nmax - 1)
@@ -57,6 +65,11 @@ class IterPower:
         #vals, vec = np.linalg.eig(self.A)
 
         return self.vp, self.c
+
+    def get_datas(self):
+
+        return self.iter_list, self.proc_time
+
 
 '''if __name__ == '__main__':
     n = 3

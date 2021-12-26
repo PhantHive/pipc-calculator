@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class InvPower:
 
     def __init__(self, A, eps, nmax):
@@ -55,6 +56,6 @@ class InvPower:
         return self.diff, (self.nmax - 1)
 
     def eigvals(self):
-        #vals, vec = np.linalg.eig(self.A)
-
+        vals, vec = np.linalg.eig(self.A)
+        print(vals, vec)
         return self.vp, self.c

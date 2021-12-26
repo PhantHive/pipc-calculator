@@ -38,6 +38,7 @@ class IVWindow(object):
         self.homeBt.setText("MENU")
         self.homeBt.move(1060, 690)
         self.homeBt.resize(130, 55)
+        self.homeBt.setProperty("type", 1)
 
         self.entry_widgets()
         self.result_widgets()

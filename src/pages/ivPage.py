@@ -5,14 +5,14 @@ from PyQt5 import QtGui, QtWidgets, QtCore, Qt
 from PyQt5.QtGui import QFont, QFontDatabase, QIntValidator
 from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QStackedWidget, QHBoxLayout, QVBoxLayout, \
     QWidget, QListWidget, QStackedLayout, QLineEdit, QFormLayout, QComboBox
-from src.maths.iterPower import IterPower
+from src.maths.invPower import InvPower
 from src.maths.createMatrix import Matrix
 import sys
 
 from src.maths.norm import Norm
 
 
-class IPWindow(object):
+class IVWindow(object):
 
     def __init__(self):
         self.onlyInt = QIntValidator()
@@ -21,15 +21,15 @@ class IPWindow(object):
         self.choice = "Random"
 
 
-    def setupUI(self, IPWindow):
-        IPWindow.setGeometry(500, 100, 1200, 750)
-        IPWindow.setFixedSize(1200, 750)
-        IPWindow.setWindowTitle("MATH PROJECT - IPSA 2021 \ Puissance Itérée")
+    def setupUI(self, IVWindow):
+        IVWindow.setGeometry(500, 100, 1200, 750)
+        IVWindow.setFixedSize(1200, 750)
+        IVWindow.setWindowTitle("MATH PROJECT - IPSA 2021 \ Puissance Itérée Inverse")
 
-        self.IVWidgets = QWidget(IPWindow)
+        self.IVWidgets = QWidget(IVWindow)
 
         self.labelIV = QLabel(self.IVWidgets)
-        self.labelIV.setText("Puissance Itérée")
+        self.labelIV.setText("Puissance Itérée Inverse")
         self.labelIV.move(50, 50)
         self.labelIV.resize(700, 70)
 
@@ -43,7 +43,7 @@ class IPWindow(object):
         self.result_widgets()
         self.move_widgets()
 
-        IPWindow.setCentralWidget(self.IVWidgets)
+        IVWindow.setCentralWidget(self.IVWidgets)
 
     def hide_mat(self, n):
 
@@ -249,7 +249,7 @@ class IPWindow(object):
                 matA = np.array(self.mat_inputs)
 
             print(matA)
-            IV = IterPower(matA, eps, nmax)
+            IV = InvPower(matA, eps, nmax)
             last_diff, nbIter = IV.iter()
             last_diff = "{:.5e}".format(Decimal(last_diff)).replace(".", ",")
 

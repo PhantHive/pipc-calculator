@@ -6,6 +6,7 @@ import sys
 
 
 class Main(object):
+
     def setupUI(self, Main):
         Main.setGeometry(500, 100, 750, 750)
         Main.setFixedSize(750, 750)
@@ -22,6 +23,12 @@ class Main(object):
         self.ipBt = QPushButton(self.mainWidget)
         self.ipBt.setText(" ♦   Puissance Itérée")
         self.ipBt.move(320, 150)
-        self.ipBt.resize(120, 55)
+        self.ipBt.resize(125, 55)
+
+        # Button Inverse Power Page
+        self.ivBt = QPushButton(self.mainWidget)
+        self.ivBt.setText(" ♦   Puissance Inverse")
+        self.ivBt.move(320, 250)
+        self.ivBt.resize(125, 55)
 
         Main.setCentralWidget(self.mainWidget)

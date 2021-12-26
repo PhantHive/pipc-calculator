@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QSta
 import sys
 
 
+from src.pages.ivPage import IVWindow
 from src.pages.ipPage import IPWindow
 from src.pages.home import Main
 
@@ -20,18 +21,27 @@ class Pjmat(QMainWindow):
         QtGui.QFontDatabase.addApplicationFont('./src/font/simplicity.ttf')
 
         self.uiMainWindow = Main()
-        self.uiIp = IPWindow()
+        self.uiIP = IPWindow()
+        self.uiIV = IVWindow()
         self.startMainWindow()
 
     def startMainWindow(self):
         self.uiMainWindow.setupUI(self)
+        # Connect buttons to the page (ivPage, ipPage ...)
         self.uiMainWindow.ipBt.clicked.connect(self.startIterPow)
+        self.uiMainWindow.ivBt.clicked.connect(self.startInvPow)
         self.show()
 
     def startIterPow(self):
-        self.uiIp.setupUI(self)
-        self.uiIp.homeBt.clicked.connect(self.startMainWindow)
+        self.uiIP.setupUI(self)
+        self.uiIP.homeBt.clicked.connect(self.startMainWindow)
         self.show()
+
+    def startInvPow(self):
+        self.uiIV.setupUI(self)
+        self.uiIV.homeBt.clicked.connect(self.startMainWindow)
+        self.show()
+    
 
     
 

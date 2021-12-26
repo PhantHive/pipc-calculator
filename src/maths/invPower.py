@@ -1,12 +1,12 @@
 import numpy as np
 
-
-class IterPower:
+class InvPower:
 
     def __init__(self, A, eps, nmax):
         self.A = A
         self.eps = eps
         self.nmax = nmax
+
         self.w = None
         self.c = None
         self.old_w = None
@@ -17,11 +17,12 @@ class IterPower:
         self.vp = None
 
     def w_sequence(self, k):
-        w = (np.linalg.matrix_power(self.A, k) @ self.x) / (np.linalg.norm((np.linalg.matrix_power(self.A, k)) @ self.x))
+        w = (np.linalg.matrix_power(self.A, k) @ self.x) / (
+            np.linalg.norm((np.linalg.matrix_power(self.A, k)) @ self.x))
         return w
 
     def c_sequence(self, w):
-        c = self.A @ w
+        c = np.linalg.inv(self.A) @ w
         return c
 
     def iter(self):
@@ -57,12 +58,3 @@ class IterPower:
         #vals, vec = np.linalg.eig(self.A)
 
         return self.vp, self.c
-
-'''if __name__ == '__main__':
-    n = 3
-    a = np.random.randint(0, 1000, size=(n, n))
-    matA = (a + a.T) / 2
-    print(matA)
-    IV = IterPower(matA, 10, 100)
-    last_diff, nbIter = IV.iter()
-    print(last_diff, nbIter)'''

@@ -44,8 +44,9 @@ class Norm:
     def mat_norm(self):
         return self.norm
 
-
-'''if __name__ == '__main__':
-    A = np.array([[1, 2, 0], [4, 3, -1]])
-    norm = Norm(A)'''
+'''
+if __name__ == '__main__':
+    A = np.array([[1, 1, 3], [1, 3, 1], [1, 1, 3]])
+    norm = Norm(A)
+'''
 

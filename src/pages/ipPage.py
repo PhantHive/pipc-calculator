@@ -1,22 +1,14 @@
 from decimal import Decimal
 
-import matplotlib.style
 import numpy as np
-from PyQt5 import QtGui, QtWidgets, QtCore, Qt
-from PyQt5.QtGui import QFont, QFontDatabase, QIntValidator
-from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QStackedWidget, QHBoxLayout, QVBoxLayout, \
-    QWidget, QListWidget, QStackedLayout, QLineEdit, QFormLayout, QComboBox
-from matplotlib import pyplot as plt
-
+from PyQt5.QtGui import QIntValidator
+from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QLineEdit, QComboBox
 
 from src.canvas.Canvas import Canvas
 from src.maths.iterPower import IterPower
 from src.maths.createMatrix import Matrix
-import sys
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from src.maths.norm import Norm
-
-
+from src.maths.src.iterative import Iter
+from src.maths.src.norm import Norm
 
 
 class IPWindow(object):
@@ -36,7 +28,6 @@ class IPWindow(object):
         self.canvas = Canvas(self.IPWidgets)
         self.canvas.resize(475, 275)
         self.canvas.move(370, 500)
-
 
         '''layout = QtWidgets.QVBoxLayout(self.IPWidgets)
         layout.addWidget(self.canvas)
@@ -270,7 +261,7 @@ class IPWindow(object):
                 matA = np.array(self.mat_inputs)
 
             print(matA)
-            IP = IterPower(matA, eps, nmax)
+            IP = Iter(matA, eps, nmax, "iterative")
             last_diff, nbIter = IP.iter()
             last_diff = "{:.5e}".format(Decimal(last_diff)).replace(".", ",")
 

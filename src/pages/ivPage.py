@@ -1,15 +1,14 @@
 from decimal import Decimal
 
 import numpy as np
-from PyQt5 import QtGui, QtWidgets, QtCore, Qt
-from PyQt5.QtGui import QFont, QFontDatabase, QIntValidator
-from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QStackedWidget, QHBoxLayout, QVBoxLayout, \
-    QWidget, QListWidget, QStackedLayout, QLineEdit, QFormLayout, QComboBox
+from PyQt5.QtGui import QIntValidator
+from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QLineEdit, QComboBox
 from src.maths.invPower import InvPower
 from src.maths.createMatrix import Matrix
-import sys
+from src.maths.src.iterative import Iter
 
-from src.maths.norm import Norm
+from src.maths.src.norm import Norm
+from src.canvas.Canvas import Canvas
 
 
 class IVWindow(object):
@@ -19,11 +18,11 @@ class IVWindow(object):
         self.startCalc = []
         self.inputs = []
         self.choice = "Random"
-
+        self.method = "Directe"
 
     def setupUI(self, IVWindow):
-        IVWindow.setGeometry(500, 100, 1200, 750)
-        IVWindow.setFixedSize(1200, 750)
+        IVWindow.setGeometry(500, 100, 1200, 780)
+        IVWindow.setFixedSize(1200, 780)
         IVWindow.setWindowTitle("MATH PROJECT - IPSA 2021 \ Puissance Itérée Inverse")
 
         self.IVWidgets = QWidget(IVWindow)
@@ -33,10 +32,14 @@ class IVWindow(object):
         self.labelIV.move(50, 50)
         self.labelIV.resize(700, 70)
 
+        self.canvas = Canvas(self.IVWidgets)
+        self.canvas.resize(475, 275)
+        self.canvas.move(370, 500)
+
         # Button Home page
         self.homeBt = QPushButton(self.IVWidgets)
         self.homeBt.setText("MENU")
-        self.homeBt.move(1060, 690)
+        self.homeBt.move(1060, 720)
         self.homeBt.resize(130, 55)
         self.homeBt.setProperty("type", 1)
 
@@ -69,12 +72,22 @@ class IVWindow(object):
             self.hide_mat(0)
             self.choice = "Custom"
 
+    def setMethod(self, text):
+        self.method = text
+
     def entry_widgets(self):
 
         self.matChoice = QComboBox(self.IVWidgets)
         self.matChoice.addItem("Random")
         self.matChoice.addItem("Custom")
         self.matChoice.activated[str].connect(self.new_ui)
+
+        # Method choice
+        self.methode = QComboBox(self.IVWidgets)
+        self.methode.addItem("Directe")
+        self.methode.addItem("QR")
+        self.methode.addItem("LU")
+        self.methode.activated[str].connect(self.setMethod)
 
         # Nitermax
         self.niterMax = QLabel(self.IVWidgets)
@@ -98,6 +111,11 @@ class IVWindow(object):
         self.custMatrix = QLabel(self.IVWidgets)
         self.custMatrix.setText("Matrice> ")
         self.custMatrix.setProperty("type", 1)
+
+        # method label
+        self.custMethod = QLabel(self.IVWidgets)
+        self.custMethod.setText("Méthode> ")
+        self.custMethod.setProperty("type", 1)
 
         # Matrix size
         self.msizeInput = QLineEdit(self.IVWidgets)
@@ -126,7 +144,6 @@ class IVWindow(object):
         self.calcul = QPushButton(self.IVWidgets)
         self.calcul.setText("Calculer =>")
         self.calcul.setProperty("type", 1)
-
 
         self.calcul.clicked.connect(self.calculate)
 
@@ -162,9 +179,13 @@ class IVWindow(object):
         self.matChoice.move(155, 270)
         self.matChoice.resize(150, 25)
 
-        self.epsInput.move(155, 340)
+        self.methode.move(155, 340)
+        self.methode.resize(150, 25)
+        self.custMethod.move(30, 340)
+
+        self.epsInput.move(155, 410)
         self.epsInput.resize(150, 25)
-        self.epsilon.move(30, 340)
+        self.epsilon.move(30, 410)
 
         self.calcul.move(360, 260)
         self.calcul.resize(85, 45)
@@ -182,21 +203,23 @@ class IVWindow(object):
         self.eigvec.move(800, 180)
         self.eigvec.resize(350, 100)
 
-        self.matA.move(180, 400)
-        self.matB.move(215, 400)
-        self.matC.move(250, 400)
+        self.matA.move(180, 470)
+        self.matB.move(215, 470)
+        self.matC.move(250, 470)
 
-        self.matD.move(180, 435)
-        self.matE.move(215, 435)
-        self.matF.move(250, 435)
+        self.matD.move(180, 505)
+        self.matE.move(215, 505)
+        self.matF.move(250, 505)
 
-        self.matG.move(180, 470)
-        self.matH.move(215, 470)
-        self.matI.move(250, 470)
+        self.matG.move(180, 540)
+        self.matH.move(215, 540)
+        self.matI.move(250, 540)
 
-        self.msizeInput.move(155, 400)
+        self.msizeInput.move(155, 480)
         self.msizeInput.resize(150, 25)
-        self.matrixSize.move(30, 400)
+        self.matrixSize.move(30, 480)
+
+
 
         for mat in self.matrix:
             mat.resize(30, 30)
@@ -224,12 +247,15 @@ class IVWindow(object):
             if self.msizeInput.text() == "":
                 self.msizeInput.setPlaceholderText("Insert an integer")
                 self.startCalc.append(False)
+            elif int(self.msizeInput.text()) > 1000:
+                self.msizeInput.clear()
+                self.msizeInput.setPlaceholderText("< 1001")
+                self.startCalc.append(False)
         else:
             for mat in self.matrix:
                 if mat.text() == "":
                     mat.setPlaceholderText("X")
                     self.startCalc.append(False)
-
 
         if False in self.startCalc:
             self.startCalc.clear()
@@ -250,7 +276,7 @@ class IVWindow(object):
                 matA = np.array(self.mat_inputs)
 
             print(matA)
-            IV = InvPower(matA, eps, nmax)
+            IV = Iter(matA, eps, nmax, "inverse", self.method)
             last_diff, nbIter = IV.iter()
             last_diff = "{:.5e}".format(Decimal(last_diff)).replace(".", ",")
 
@@ -280,3 +306,7 @@ class IVWindow(object):
             self.nbiter.setText(f"Nb iter = {nbIter}")
             self.lastdiff.setText(f"Ecart = {last_diff}")
             self.eigvals.setText(eigvals_txt)
+
+            iter_list, proc_list = IV.get_datas()
+            self.canvas.plot(iter_list, proc_list)
+            self.canvas.draw()

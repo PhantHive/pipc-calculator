@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QPushButton, QApplication, QMainWindow, QLabel, QSta
     QWidget, QListWidget, QStackedLayout
 import sys
 
-
 from src.pages.ivPage import IVWindow
 from src.pages.ipPage import IPWindow
 from src.pages.home import Main
@@ -41,9 +40,6 @@ class Pjmat(QMainWindow):
         self.uiIV.setupUI(self)
         self.uiIV.homeBt.clicked.connect(self.startMainWindow)
         self.show()
-    
-
-    
 
 
 if __name__ == '__main__':

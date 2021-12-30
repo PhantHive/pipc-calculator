@@ -158,7 +158,7 @@ class IVWindow(object):
         self.lastdiff.setProperty("type", 2)
 
         self.eigvals = QLabel(self.IVWidgets)
-        self.eigvals.setText('*Valeur Propre Max*')
+        self.eigvals.setText('*Valeur Propre Min*')
         self.eigvals.setProperty("type", 2)
 
         self.valnorm = QLabel(self.IVWidgets)
@@ -284,7 +284,7 @@ class IVWindow(object):
             self.eigvec.resize(450, 300)
             vals, vecs = IV.eigvals()
             val = "{:.2f}".format(Decimal(vals)).replace(".", ",")
-            eigvals_txt = f"Valeur Propre Max: \n {val} \n"
+            eigvals_txt = f"Valeur Propre Min: \n {val} \n"
 
             if len(vecs) > 7:
                 vec_txt = "Approximation de Vecteur Propre: \n\n Trop grand pour être affiché"

@@ -3,6 +3,10 @@ import numpy as np
 
 
 class IterPower(object):
+    '''
+    This method use a c_sequence and a w_sequence defined below.
+    Used to get an approximation of the max eigen value and eigen vector.
+    '''
 
     def __init__(self, A, eps, nmax):
         self.A = A
@@ -31,7 +35,7 @@ class IterPower(object):
     def eigvals(self):
         # vals, vec = np.linalg.eig(self.A)
 
-        return self.vp, self.c
+        return self.vp, self.w
 
     def get_datas(self):
         return self.iter_list, self.proc_time
@@ -42,6 +46,6 @@ class IterPower(object):
     a = np.random.randint(0, 1000, size=(n, n))
     matA = (a + a.T) / 2
     print(matA)
-    IV = IterPower(matA, 10, 100)
-    last_diff, nbIter = IV.iter()
+    IP = IterPower(matA, 10, 100)
+    last_diff, nbIter = IP.iter()
     print(last_diff, nbIter)'''

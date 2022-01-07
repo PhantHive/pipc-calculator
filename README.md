@@ -22,6 +22,7 @@ to calculate math functions such as the Iterative Power function.
 ### Options
 
 > Iterative Power
+> Inverse Power
 
 
 ### Built With

@@ -14,7 +14,7 @@ class Pjmat(QMainWindow):
         super(Pjmat, self).__init__(parent)
 
         self.icon = QtGui.QIcon()
-        self.icon.addPixmap(QtGui.QPixmap('src/image/bg.jpg'), QtGui.QIcon.Selected, QtGui.QIcon.On)
+        self.icon.addPixmap(QtGui.QPixmap('src/image/maths.png'), QtGui.QIcon.Selected, QtGui.QIcon.On)
         self.setWindowIcon(self.icon)
 
         QtGui.QFontDatabase.addApplicationFont('./src/font/simplicity.ttf')

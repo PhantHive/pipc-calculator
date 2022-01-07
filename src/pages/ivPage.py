@@ -14,6 +14,7 @@ from src.canvas.Canvas import Canvas
 class IVWindow(object):
 
     def __init__(self):
+
         self.onlyInt = QIntValidator()
         self.startCalc = []
         self.inputs = []
@@ -165,6 +166,10 @@ class IVWindow(object):
         self.valnorm.setText('*Norme*')
         self.valnorm.setProperty("type", 2)
 
+        self.cond = QLabel(self.IVWidgets)
+        self.cond.setText('*Conditionnement*')
+        self.cond.setProperty("type", 2)
+
         self.eigvec = QLabel(self.IVWidgets)
         self.eigvec.setText('*Approximation de Vecteur Propre*')
         self.eigvec.setProperty("type", 2)
@@ -190,16 +195,21 @@ class IVWindow(object):
         self.calcul.move(360, 260)
         self.calcul.resize(85, 45)
 
-        self.valnorm.move(485, 180)
+        self.valnorm.move(485, 150)
         self.valnorm.resize(250, 50)
 
-        self.nbiter.move(485, 250)
+        # result widgets
+        self.nbiter.move(485, 220)
         self.nbiter.resize(250, 50)
-        self.lastdiff.move(485, 320)
+        self.lastdiff.move(485, 290)
         self.lastdiff.resize(250, 50)
 
-        self.eigvals.move(485, 390)
+        self.eigvals.move(485, 360)
         self.eigvals.resize(250, 50)
+
+        self.cond.move(485, 430)
+        self.cond.resize(250, 50)
+
         self.eigvec.move(800, 180)
         self.eigvec.resize(350, 100)
 
@@ -278,13 +288,23 @@ class IVWindow(object):
             print(matA)
             IV = Iter(matA, eps, nmax, "inverse", self.method)
             last_diff, nbIter = IV.iter()
+
+            # Conditionement
+            IP = Iter(matA, eps, nmax, "iterative", self.method)
+            IP.iter()
+
             last_diff = "{:.5e}".format(Decimal(last_diff)).replace(".", ",")
 
             self.eigvals.resize(250, 100)
             self.eigvec.resize(450, 300)
             vals, vecs = IV.eigvals()
+            v_min = vals
+
             val = "{:.2f}".format(Decimal(vals)).replace(".", ",")
             eigvals_txt = f"Valeur Propre Min: \n {val} \n"
+
+            vals_max, vec_max = IP.eigvals()
+            v_max = vals_max
 
             if len(vecs) > 7:
                 vec_txt = "Approximation de Vecteur Propre: \n\n Trop grand pour être affiché"
@@ -306,6 +326,12 @@ class IVWindow(object):
             self.nbiter.setText(f"Nb iter = {nbIter}")
             self.lastdiff.setText(f"Ecart = {last_diff}")
             self.eigvals.setText(eigvals_txt)
+
+            # Calculate cond
+            cond, cond_np = IV.get_cond(v_max, v_min)
+            print("Cond = ", cond, cond_np)
+            cond = "{:.2f}".format(Decimal(cond)).replace(".", ",")
+            self.cond.setText(f"Cond = {cond}")
 
             iter_list, proc_list = IV.get_datas()
             self.canvas.plot(iter_list, proc_list)

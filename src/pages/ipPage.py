@@ -287,6 +287,8 @@ class IPWindow(object):
             norm = "{:.5f}".format(Decimal(norm)).replace(".", ",")
 
             self.valnorm.setText(f"Norme = {norm}")
+            print(f"Norme avec le fichier norm.py: {norm} \n "
+                  f"Norme avec numpy: {np.linalg.norm(matA)}")
             self.eigvec.setText(vec_txt)
             self.nbiter.setText(f"Nb iter = {nbIter}")
             self.lastdiff.setText(f"Ecart = {last_diff}")

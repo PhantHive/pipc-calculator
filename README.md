@@ -30,6 +30,11 @@ to calculate math functions such as the Iterative Power function.
 * [Python](https://www.python.org)
 * [PyQt5](https://pypi.org/project/PyQt5/)
 
+
+### Acknowledgement
+
+> Self-taught project during my studies at IPSA Paris. 
+
 > Project Link: [https://github.com/PhantHive/math_project](https://github.com/PhantHive/math_project/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
